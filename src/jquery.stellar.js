@@ -237,7 +237,7 @@
 
 			if (!this.options.parallaxElements) return;
 
-			this.$element.find('[data-stellar-ratio]').each(function(i){
+			this.$element.find('[data-stellar-ratio],[data-stellar-vertical-ratio],[data-stellar-horizontal-ratio]').each(function(i){
 				var $this = $(this),
 					horizontalOffset,
 					verticalOffset,
@@ -314,7 +314,8 @@
 					startingOffsetTop: offsetTop,
 					parentOffsetLeft: parentOffsetLeft,
 					parentOffsetTop: parentOffsetTop,
-					stellarRatio: $this.data('stellar-ratio') !== undefined ? $this.data('stellar-ratio') : 1,
+					verticalRatio: $this.data('stellar-vertical-ratio') !== undefined ? $this.data('stellar-vertical-ratio') : 1,
+					horizontalRatio: $this.data('stellar-horizontal-ratio') !== undefined ? $this.data('stellar-horizontal-ratio') : 1,
 					width: $this.outerWidth(true),
 					height: $this.outerHeight(true),
 					isHidden: false
@@ -503,11 +504,12 @@
 
 				//Calculate position, then calculate what the particle's new offset will be (for visibility check)
 				if (this.options.horizontalScrolling) {
-					newPositionLeft = (scrollLeft + particle.horizontalOffset + this.viewportOffsetLeft + particle.startingPositionLeft - particle.startingOffsetLeft + particle.parentOffsetLeft) * -(particle.stellarRatio + fixedRatioOffset - 1) + particle.startingPositionLeft;
+					console.log(particle.verticalRatio)
+					newPositionLeft = (scrollLeft + particle.horizontalOffset + this.viewportOffsetLeft + particle.startingPositionLeft - particle.startingOffsetLeft + particle.parentOffsetLeft) * -(particle.horizontalRatio + fixedRatioOffset - 1) + particle.startingPositionLeft;
 					newOffsetLeft = newPositionLeft - particle.startingPositionLeft + particle.startingOffsetLeft;
 				}
 				if (this.options.verticalScrolling) {
-					newPositionTop = (scrollTop + particle.verticalOffset + this.viewportOffsetTop + particle.startingPositionTop - particle.startingOffsetTop + particle.parentOffsetTop) * -(particle.stellarRatio + fixedRatioOffset - 1) + particle.startingPositionTop;
+					newPositionTop = (scrollTop + particle.verticalOffset + this.viewportOffsetTop + particle.startingPositionTop - particle.startingOffsetTop + particle.parentOffsetTop) * -(particle.verticalRatio + fixedRatioOffset - 1) + particle.startingPositionTop;
 					newOffsetTop = newPositionTop - particle.startingPositionTop + particle.startingOffsetTop;
 				}
 
@@ -543,6 +545,7 @@
 				background = this.backgrounds[i];
 
 				fixedRatioOffset = background.isFixed ? 0 : 1;
+
 				bgLeft = this.options.horizontalScrolling ? (scrollLeft + background.horizontalOffset - this.viewportOffsetLeft - background.startingOffsetLeft + background.parentOffsetLeft - background.startingBackgroundPositionLeft) * (fixedRatioOffset - background.stellarRatio) + 'px' : background.startingValueLeft;
 				bgTop = this.options.verticalScrolling ? (scrollTop + background.verticalOffset - this.viewportOffsetTop - background.startingOffsetTop + background.parentOffsetTop - background.startingBackgroundPositionTop) * (fixedRatioOffset - background.stellarRatio) + 'px' : background.startingValueTop;
 
